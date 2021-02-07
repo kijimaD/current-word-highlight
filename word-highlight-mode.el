@@ -84,9 +84,10 @@
 
 (defun idle-highlight-word-at-point ()
   "Highlight the word under the point."
+  (interactive)
   (if idle-highlight-mode
       (let* ((target-symbol (symbol-at-point))
-             (target (symbol-name target-symbol)))
+             (target (word-at-point)))
         (idle-highlight-unhighlight)
         (when (and target-symbol
                    (not (in-string-p))
