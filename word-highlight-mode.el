@@ -62,9 +62,9 @@
  :group 'faces)
 
 (defface idle-highlight
- '((t (:inherit region)))
- "Face used to highlight other occurrences of the word at point."
- :group 'idle-highlight)
+  '((t (:foreground "GhostWhite" :background "LightYellow4")))
+  "Face used to highlight other occurrences of the word at point."
+  :group 'idle-highlight)
 
 (defcustom idle-highlight-exceptions '("end")
   "List of words to be excepted from highlighting."
@@ -86,15 +86,18 @@
   "Highlight the word under the point."
   (interactive)
   (if idle-highlight-mode
-      (let* ((target-symbol (symbol-at-point))
-             (target (word-at-point)))
-        (idle-highlight-unhighlight)
-        (when (and target-symbol
-                   (not (in-string-p))
-                   (looking-at-p "\\s_\\|\\sw") ;; Symbol characters
-                   (not (member target idle-highlight-exceptions)))
+      (save-excursion
+        (backward-word-strictly)
+        (let* ((start (point))
+               (end (+ (point) (length (current-word nil t))))
+               (target (word-at-point)))
+          (idle-highlight-unhighlight)
+          (add-text-properties start end 'idle-highlight)
+          (message (concat (number-to-string start)
+                           ", "
+                           (number-to-string end)))
           (setq idle-highlight-regexp (concat "\\<" (regexp-quote target) "\\>"))
-          (highlight-regexp idle-highlight-regexp 'idle-highlight)))))
+          ))))
 
 (defun test1 ()
   (interactive)
