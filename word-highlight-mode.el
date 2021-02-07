@@ -96,6 +96,16 @@
           (setq idle-highlight-regexp (concat "\\<" (regexp-quote target) "\\>"))
           (highlight-regexp idle-highlight-regexp 'idle-highlight)))))
 
+(defun test1 ()
+  (interactive)
+  (let* ((start (point))
+         (word-property (word-at-point))
+         (end (+ (point) (elt word-property 2))))
+  ;; (add-text-properties start end '(font-lock-face (:foreground "red")))
+  (message (concat (number-to-string start)
+                   ", "
+                   (number-to-string end)))))
+
 (defsubst idle-highlight-unhighlight ()
   (when idle-highlight-regexp
     (unhighlight-regexp idle-highlight-regexp)
