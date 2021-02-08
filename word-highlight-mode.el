@@ -82,6 +82,13 @@
 (defvar idle-highlight-global-timer nil
  "Timer to trigger highlighting.")
 
+(defvar current-word-overlay nil)
+(make-variable-buffer-local 'current-word-overlay)
+
+(defun highlight-current-word (beg end)
+  (let* ((overlay (make-overlay beg end nil nil t)))
+    (setq current-word-overlay overlay)))
+
 (defun idle-highlight-word-at-point ()
   "Highlight the word under the point."
   (interactive)
@@ -92,13 +99,9 @@
         (let* ((start (point))
                (end (+ (point) (length (current-word nil t))))
                (target (word-at-point)))
-          (idle-highlight-unhighlight)
-          (remove-display-text-property (point-min) (point-max))
-          (add-text-properties start end '(font-lock-face (:foreground "red")))
-          (setq idle-highlight-regexp (concat "\\<" (regexp-quote target) "\\>"))
+          (delete-overlay current-word-overlay)
           (highlight-current-word start end)
-          (overlay-put current-word-overlay 'face '(background-color . "blue"))
-          ))))
+          (overlay-put current-word-overlay 'face '(bold))))))
 
 (defsubst idle-highlight-unhighlight ()
   (when idle-highlight-regexp
