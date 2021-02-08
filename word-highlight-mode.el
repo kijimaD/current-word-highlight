@@ -96,6 +96,8 @@
           (remove-display-text-property (point-min) (point-max))
           (add-text-properties start end '(font-lock-face (:foreground "red")))
           (setq idle-highlight-regexp (concat "\\<" (regexp-quote target) "\\>"))
+          (highlight-current-word start end)
+          (overlay-put current-word-overlay 'face '(background-color . "blue"))
           ))))
 
 (defsubst idle-highlight-unhighlight ()
