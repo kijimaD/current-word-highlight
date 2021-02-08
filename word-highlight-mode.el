@@ -87,27 +87,16 @@
   (interactive)
   (if idle-highlight-mode
       (save-excursion
-        (backward-word-strictly)
+        (forward-char)
+        (backward-word)
         (let* ((start (point))
                (end (+ (point) (length (current-word nil t))))
                (target (word-at-point)))
           (idle-highlight-unhighlight)
-          (add-text-properties start end 'idle-highlight)
-          (message (concat (number-to-string start)
-                           ", "
-                           (number-to-string end)))
+          (remove-display-text-property (point-min) (point-max))
+          (add-text-properties start end '(font-lock-face (:foreground "red")))
           (setq idle-highlight-regexp (concat "\\<" (regexp-quote target) "\\>"))
           ))))
-
-(defun test1 ()
-  (interactive)
-  (let* ((start (point))
-         (word-property (word-at-point))
-         (end (+ (point) (elt word-property 2))))
-  ;; (add-text-properties start end '(font-lock-face (:foreground "red")))
-  (message (concat (number-to-string start)
-                   ", "
-                   (number-to-string end)))))
 
 (defsubst idle-highlight-unhighlight ()
   (when idle-highlight-regexp
