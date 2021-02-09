@@ -31,10 +31,9 @@
 
 ;;; Commentary:
 
-;; Based on some snippets by fledermaus from the #emacs channel.
+;; Based on idle-highlight-mode by Phil Hagelberg, Cornelius Mika
 
-;; M-x idle-highlight-mode sets an idle timer that highlights all
-;; occurences in the buffer of the word under the point.
+;; M-x current-Word-highlight-mode sets an idle timer that highlight current word
 
 ;; Enabling it in a hook is recommended. But you don't want it enabled
 ;; for all buffers, just programming ones.
@@ -45,7 +44,7 @@
 ;;   (make-local-variable 'column-number-mode)
 ;;   (column-number-mode t)
 ;;   (if window-system (hl-line-mode t))
-;;   (current-word--highlight-mode t))
+;;   (current-word-highlight-mode t))
 ;;
 ;; (add-hook 'emacs-lisp-mode-hook 'my-coding-hook)
 ;; (add-hook 'ruby-mode-hook 'my-coding-hook)
