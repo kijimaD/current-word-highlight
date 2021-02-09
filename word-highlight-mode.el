@@ -87,6 +87,7 @@
 
 (defun highlight-current-word (beg end)
   (let* ((overlay (make-overlay beg end nil nil t)))
+    (overlay-put overlay 'priority 1001) ; auto-highlight-symbol.elより前に表示させたいため。ahsのpriorityは1000なのでそれより大きくする必要がある。
     (setq current-word-overlay overlay)))
 
 (defun idle-highlight-word-at-point ()
@@ -101,7 +102,7 @@
                (target (word-at-point)))
           (delete-overlay current-word-overlay)
           (highlight-current-word start end)
-          (overlay-put current-word-overlay 'face '(bold))))))
+          (overlay-put current-word-overlay 'face '(:foreground "black" :background "green"))))))
 
 (defsubst idle-highlight-unhighlight ()
   (when idle-highlight-regexp
