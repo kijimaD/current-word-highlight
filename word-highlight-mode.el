@@ -46,7 +46,7 @@
 ;;   (make-local-variable 'column-number-mode)
 ;;   (column-number-mode t)
 ;;   (if window-system (hl-line-mode t))
-;;   (idle-highlight-mode t))
+;;   (current-word--highlight-mode t))
 ;;
 ;; (add-hook 'emacs-lisp-mode-hook 'my-coding-hook)
 ;; (add-hook 'ruby-mode-hook 'my-coding-hook)
@@ -55,8 +55,8 @@
 ;;; Code:
 
 (defgroup current-word-highlight nil
- "Highlight other occurrences of the word at point."
- :group 'current-word-highlight)
+  "Highlight other occurrences of the word at point."
+  :group 'current-word-highlight)
 
 (defface current-word-highlight-face
   '((t (:foreground "black" :background "DarkOrange3")))
@@ -74,10 +74,11 @@
   :type 'float)
 
 (defvar current-word-highlight-regexp nil
- "Buffer-local regexp to be current-word-highlighted.")
+  "Buffer-local regexp to be current-word-highlighted.")
 
 (defvar current-word-highlight-global-timer nil
- "Timer to trigger highlighting.")
+  "Timer to trigger highlighting.")
+
 (defvar current-word-highlight-mode nil
   "Dummy for suppress bytecompiler warning.")
 
@@ -88,6 +89,7 @@
   "Fire up `current-word-highlight-mode' if not minibuffer"
   (if (and (not (minibufferp (current-buffer))))
       (current-word-highlight-mode t)))
+
 (defun highlight-current-word (beg end)
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; auto-highlight-symbol.elより前に表示させたいため。ahsのpriorityは1000なのでそれより大きくする必要がある。
@@ -95,8 +97,8 @@
     (setq current-word-overlay overlay)))
 
 (defun unhighlight-current-word ()
-    (if current-word-overlay
-        (delete-overlay current-word-overlay)))
+  (if current-word-overlay
+      (delete-overlay current-word-overlay)))
 
 (defun current-word-highlight-word-at-point ()
   "Highlight the word under the point."
@@ -126,7 +128,7 @@
                      (run-with-idle-timer current-word-highlight-time
                                           :repeat 'current-word-highlight-word-at-point)))
              (set (make-local-variable 'current-word-highlight-regexp) nil))
-     (unhighlight-current-word)))
+    (unhighlight-current-word)))
 
 (provide 'current-word-highlight-mode)
 ;;; current-word-highlight-mode.el ends here
