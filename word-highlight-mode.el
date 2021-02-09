@@ -78,10 +78,16 @@
 
 (defvar current-word-highlight-global-timer nil
  "Timer to trigger highlighting.")
+(defvar current-word-highlight-mode nil
+  "Dummy for suppress bytecompiler warning.")
 
 (defvar current-word-overlay nil)
 (make-variable-buffer-local 'current-word-overlay)
 
+(defun current-word-highlight-mode-maybe ()
+  "Fire up `current-word-highlight-mode' if not minibuffer"
+  (if (and (not (minibufferp (current-buffer))))
+      (current-word-highlight-mode t)))
 (defun highlight-current-word (beg end)
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; auto-highlight-symbol.elより前に表示させたいため。ahsのpriorityは1000なのでそれより大きくする必要がある。
@@ -103,6 +109,12 @@
                (end (+ (point) (length (current-word nil t)))))
           (unhighlight-current-word)
           (highlight-current-word start end)))))
+
+;;;###autoload
+(define-globalized-minor-mode global-current-word-highlight-mode
+  "Global mode"
+  current-word-highlight-mode current-word-highlight-mode-maybe
+  :group 'current-word-highlight)
 
 ;;;###autoload
 (define-minor-mode current-word-highlight-mode
