@@ -54,16 +54,14 @@
 
 ;;; Code:
 
-(defgroup idle-highlight-faces nil
+(defgroup idle-highlight nil
  "Highlight other occurrences of the word at point."
- :group 'faces)
+ :group 'idle-highlight)
 
 (defface idle-highlight-face
-  '((t (:inherit bold)))
+  '((t (:foreground "black" :background "DarkOrange3")))
   "Face for bold text."
-  :group 'idle-highlight-faces)
-
-(defvar idle-highlight-face 'idle-highlight-face)
+  :group 'idle-highlight)
 
 (defcustom idle-highlight-exceptions '("end")
   "List of words to be excepted from highlighting."
@@ -87,7 +85,7 @@
 (defun highlight-current-word (beg end)
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; auto-highlight-symbol.elより前に表示させたいため。ahsのpriorityは1000なのでそれより大きくする必要がある。
-    (overlay-put overlay 'face '(:foreground "black" :background "DarkOrange3"))
+    (overlay-put overlay 'face 'idle-highlight-face)
     (setq current-word-overlay overlay)))
 
 (defun unhighlight-current-word ()
