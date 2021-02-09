@@ -54,24 +54,23 @@
 
 ;;; Code:
 
-(require 'thingatpt)
-
-
-(defgroup idle-highlight nil
+(defgroup idle-highlight-faces nil
  "Highlight other occurrences of the word at point."
  :group 'faces)
 
-(defface idle-highlight
-  '((t (:foreground "GhostWhite" :background "LightYellow4")))
-  "Face used to highlight other occurrences of the word at point."
-  :group 'idle-highlight)
+(defface idle-highlight-face
+  '((t (:inherit bold)))
+  "Face for bold text."
+  :group 'idle-highlight-faces)
+
+(defvar idle-highlight-face 'idle-highlight-face)
 
 (defcustom idle-highlight-exceptions '("end")
   "List of words to be excepted from highlighting."
   :group 'idle-highlight
   :type '(repeat string))
 
-(defcustom idle-highlight-idle-time 0.5
+(defcustom idle-highlight-idle-time 0.1
   "Time after which to highlight the word at point."
   :group 'idle-highlight
   :type 'float)
