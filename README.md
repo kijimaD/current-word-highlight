@@ -1,4 +1,4 @@
-# word-highlight-mode.el
+# current-word-highlight-mode.el
 
 ## TODO
 - [x] face指定がうまくいってない。deffaceで定義したものを使いたい。add-text-propertyがよくない感じか？

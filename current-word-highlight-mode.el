@@ -1,15 +1,14 @@
-;;; idle-highlight-mode.el --- highlight the word the point is on
+;;; current-word-highlight-mode.el --- Highlight the current word
 
-;; Copyright (C) 2008-2011 Phil Hagelberg, Cornelius Mika
+;; Copyright (C) 2021 Kijima Daigo
 
-;; Author: Phil Hagelberg, Cornelius Mika
-;; URL: http://www.emacswiki.org/cgi-bin/wiki/IdleHighlight
-;; Package-Version: 20120920.1648
-;; Package-Commit: c466f2a9e291f9da1167dc879577b2e1a7880482
-;; Version: 1.1.3
-;; Created: 2008-05-13
+;; Author: Kijima Daigo
+;; URL: https://github.com/kijimaD/current-word-highlight-mode
+;; Package-Version: 20210210.0030
+;; Package-Commit: c1a872045fae39d73a1b19e6d41a5e793146bfdc
+;; Version: 1.0.0
+;; Created: 2021-02-10
 ;; Keywords: convenience
-;; EmacsWiki: IdleHighlight
 
 ;; This file is NOT part of GNU Emacs.
 
