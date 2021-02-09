@@ -54,29 +54,29 @@
 
 ;;; Code:
 
-(defgroup idle-highlight nil
+(defgroup current-word-highlight nil
  "Highlight other occurrences of the word at point."
- :group 'idle-highlight)
+ :group 'current-word-highlight)
 
-(defface idle-highlight-face
+(defface current-word-highlight-face
   '((t (:foreground "black" :background "DarkOrange3")))
   "Face for bold text."
-  :group 'idle-highlight)
+  :group 'current-word-highlight)
 
-(defcustom idle-highlight-exceptions '("end")
+(defcustom current-word-highlight-exceptions '("end")
   "List of words to be excepted from highlighting."
-  :group 'idle-highlight
+  :group 'current-word-highlight
   :type '(repeat string))
 
-(defcustom idle-highlight-idle-time 0.1
+(defcustom current-word-highlight-time 0.1
   "Time after which to highlight the word at point."
-  :group 'idle-highlight
+  :group 'current-word-highlight
   :type 'float)
 
-(defvar idle-highlight-regexp nil
- "Buffer-local regexp to be idle-highlighted.")
+(defvar current-word-highlight-regexp nil
+ "Buffer-local regexp to be current-word-highlighted.")
 
-(defvar idle-highlight-global-timer nil
+(defvar current-word-highlight-global-timer nil
  "Timer to trigger highlighting.")
 
 (defvar current-word-overlay nil)
@@ -85,17 +85,17 @@
 (defun highlight-current-word (beg end)
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; auto-highlight-symbol.elより前に表示させたいため。ahsのpriorityは1000なのでそれより大きくする必要がある。
-    (overlay-put overlay 'face 'idle-highlight-face)
+    (overlay-put overlay 'face 'current-word-highlight-face)
     (setq current-word-overlay overlay)))
 
 (defun unhighlight-current-word ()
     (if current-word-overlay
         (delete-overlay current-word-overlay)))
 
-(defun idle-highlight-word-at-point ()
+(defun current-word-highlight-word-at-point ()
   "Highlight the word under the point."
   (interactive)
-  (if idle-highlight-mode
+  (if current-word-highlight-mode
       (save-excursion
         (forward-char)
         (backward-word)
@@ -105,16 +105,16 @@
           (highlight-current-word start end)))))
 
 ;;;###autoload
-(define-minor-mode idle-highlight-mode
-  "Idle-Highlight Minor Mode"
-  :group 'idle-highlight
-  (if idle-highlight-mode
-      (progn (unless idle-highlight-global-timer
-               (setq idle-highlight-global-timer
-                     (run-with-idle-timer idle-highlight-idle-time
-                                          :repeat 'idle-highlight-word-at-point)))
-             (set (make-local-variable 'idle-highlight-regexp) nil))
-    (idle-highlight-unhighlight)))
+(define-minor-mode current-word-highlight-mode
+  "Current-Word-Highlight Minor Mode"
+  :group 'current-word-highlight
+  (if current-word-highlight-mode
+      (progn (unless current-word-highlight-global-timer
+               (setq current-word-highlight-global-timer
+                     (run-with-idle-timer current-word-highlight-time
+                                          :repeat 'current-word-highlight-word-at-point)))
+             (set (make-local-variable 'current-word-highlight-regexp) nil))
+     (unhighlight-current-word)))
 
-(provide 'idle-highlight-mode)
-;;; idle-highlight-mode.el ends here
+(provide 'current-word-highlight-mode)
+;;; current-word-highlight-mode.el ends here
