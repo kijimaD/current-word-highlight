@@ -88,7 +88,12 @@
 (defun highlight-current-word (beg end)
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; auto-highlight-symbol.elより前に表示させたいため。ahsのpriorityは1000なのでそれより大きくする必要がある。
+    (overlay-put overlay 'face '(:foreground "black" :background "DarkOrange3"))
     (setq current-word-overlay overlay)))
+
+(defun unhighlight-current-word ()
+    (if current-word-overlay
+        (delete-overlay current-word-overlay)))
 
 (defun idle-highlight-word-at-point ()
   "Highlight the word under the point."
@@ -98,16 +103,9 @@
         (forward-char)
         (backward-word)
         (let* ((start (point))
-               (end (+ (point) (length (current-word nil t))))
-               (target (word-at-point)))
-          (delete-overlay current-word-overlay)
-          (highlight-current-word start end)
-          (overlay-put current-word-overlay 'face '(:foreground "black" :background "green"))))))
-
-(defsubst idle-highlight-unhighlight ()
-  (when idle-highlight-regexp
-    (unhighlight-regexp idle-highlight-regexp)
-    (setq idle-highlight-regexp nil)))
+               (end (+ (point) (length (current-word nil t)))))
+          (unhighlight-current-word)
+          (highlight-current-word start end)))))
 
 ;;;###autoload
 (define-minor-mode idle-highlight-mode
