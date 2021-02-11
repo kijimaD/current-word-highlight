@@ -103,6 +103,7 @@
   (interactive)
   (if current-word-highlight-mode
       (save-excursion
+        (forward-word)
         (backward-word)
         (let* ((start (point))
                '(forward-word)
