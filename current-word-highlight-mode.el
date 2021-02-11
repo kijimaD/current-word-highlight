@@ -103,10 +103,10 @@
   (interactive)
   (if current-word-highlight-mode
       (save-excursion
-        (forward-char)
         (backward-word)
         (let* ((start (point))
-               (end (+ (point) (length (current-word nil t)))))
+               '(forward-word)
+               (end (point)))
           (unhighlight-current-word)
           (highlight-current-word start end)))))
 
