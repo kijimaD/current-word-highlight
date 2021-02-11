@@ -112,7 +112,6 @@
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
-  "Global mode"
   current-word-highlight-mode current-word-highlight-mode-maybe
   :group 'current-word-highlight)
 
