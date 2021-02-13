@@ -33,7 +33,7 @@
 
 ;; Based on idle-highlight-mode by Phil Hagelberg, Cornelius Mika
 
-;; M-x current-Word-highlight-mode sets an idle timer that highlight current word
+;; M-x current-Word-highlight-mode highlight current word
 
 ;; Enabling it in a hook is recommended. But you don't want it enabled
 ;; for all buffers, just programming ones.
@@ -57,7 +57,7 @@
   :group 'current-word-highlight)
 
 (defface current-word-highlight-face
-  '((t (:foreground "black" :background "DarkOrange3")))
+  '((t (:foreground "black" :background "honeydew")))
   "Face for bold text."
   :group 'current-word-highlight)
 
@@ -88,12 +88,11 @@
   (if (and (not (minibufferp (current-buffer))))
       (current-word-highlight-mode t)))
 
-(defun highlight-current-word (beg end original-point)
-  (if (and (<= beg original-point) (<= original-point end))
-      (let* ((overlay (make-overlay beg end nil nil t)))
-        (overlay-put overlay 'priority 1001) ; auto-highlight-symbol.elより前に表示させたいため。ahsのpriorityは1000なのでそれより大きくする必要がある。
-        (overlay-put overlay 'face 'current-word-highlight-face)
-        (setq current-word-overlay overlay))))
+(defun highlight-current-word (beg end)
+  (let* ((overlay (make-overlay beg end nil nil t)))
+    (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
+    (overlay-put overlay 'face 'current-word-highlight-face)
+    (setq current-word-overlay overlay)))
 
 (defun unhighlight-current-word ()
   "Delete old highlight"
@@ -112,7 +111,8 @@
           (let* ((start (point))
                  '(forward-word)
                  (end (point)))
-            (highlight-current-word start end original-point))))))
+            (if (and (<= start original-point) (<= original-point end))
+                (highlight-current-word start end)))))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
