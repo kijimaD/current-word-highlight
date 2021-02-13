@@ -88,28 +88,31 @@
   (if (and (not (minibufferp (current-buffer))))
       (current-word-highlight-mode t)))
 
-(defun highlight-current-word (beg end)
-  (let* ((overlay (make-overlay beg end nil nil t)))
-    (overlay-put overlay 'priority 1001) ; auto-highlight-symbol.elより前に表示させたいため。ahsのpriorityは1000なのでそれより大きくする必要がある。
-    (overlay-put overlay 'face 'current-word-highlight-face)
-    (setq current-word-overlay overlay)))
+(defun highlight-current-word (beg end original-point)
+  (if (and (<= beg original-point) (<= original-point end))
+      (let* ((overlay (make-overlay beg end nil nil t)))
+        (overlay-put overlay 'priority 1001) ; auto-highlight-symbol.elより前に表示させたいため。ahsのpriorityは1000なのでそれより大きくする必要がある。
+        (overlay-put overlay 'face 'current-word-highlight-face)
+        (setq current-word-overlay overlay))))
 
 (defun unhighlight-current-word ()
+  "Delete old highlight"
   (if current-word-overlay
       (delete-overlay current-word-overlay)))
 
 (defun current-word-highlight-word-at-point ()
   "Highlight the word under the point."
   (interactive)
+  (unhighlight-current-word)
   (if current-word-highlight-mode
       (save-excursion
-        (forward-word)
-        (backward-word)
-        (let* ((start (point))
-               '(forward-word)
-               (end (point)))
-          (unhighlight-current-word)
-          (highlight-current-word start end)))))
+        (let ((original-point (point)))
+          (forward-word)
+          (backward-word)
+          (let* ((start (point))
+                 '(forward-word)
+                 (end (point)))
+            (highlight-current-word start end original-point))))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
