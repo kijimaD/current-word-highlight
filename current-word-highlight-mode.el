@@ -33,22 +33,13 @@
 
 ;; Based on idle-highlight-mode by Phil Hagelberg, Cornelius Mika
 
-;; M-x current-Word-highlight-mode highlight current word
+;; M-x current-Word-highlight-mode
 
 ;; Enabling it in a hook is recommended. But you don't want it enabled
 ;; for all buffers, just programming ones.
-;;
+
 ;; Example:
-;;
-;; (defun my-coding-hook ()
-;;   (make-local-variable 'column-number-mode)
-;;   (column-number-mode t)
-;;   (if window-system (hl-line-mode t))
-;;   (current-word-highlight-mode t))
-;;
-;; (add-hook 'emacs-lisp-mode-hook 'my-coding-hook)
-;; (add-hook 'ruby-mode-hook 'my-coding-hook)
-;; (add-hook 'js2-mode-hook 'my-coding-hook)
+;; (add-hook 'prog-mode-hook 'current-word-highlight-mode)
 
 ;;; Code:
 
@@ -137,7 +128,6 @@
 (defun current-word-highlight-word-at-point ()
   "Highlight the word under the point. If the point is not on a word, highlight the around word."
   (interactive)
-  (unhighlight-current-word)
   (if current-word-highlight-mode
       (save-excursion
         (let ((original-point (point)))
@@ -147,7 +137,8 @@
                  '(forward-word)
                  (end (point)))
             (cond ((and (<= start original-point) (<= original-point end)) (highlight-current-word start end))
-                  (t (highlight-around-word start end))))))))
+                  (t (highlight-around-word start end))))
+          (add-hook 'pre-command-hook #'unhighlight-current-word)))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
