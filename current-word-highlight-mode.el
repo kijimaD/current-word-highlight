@@ -57,8 +57,13 @@
   :group 'current-word-highlight)
 
 (defface current-word-highlight-face
-  '((t (:foreground "black" :background "honeydew")))
-  "Face for bold text."
+  '((t (:foreground "black" :background "DeepSkyBlue")))
+  "Face for main highlight."
+  :group 'current-word-highlight)
+
+(defface current-word-highlight-sub-face
+  '((t (:foreground "black" :background "HotPink")))
+  "Face for sub highlight."
   :group 'current-word-highlight)
 
 (defcustom current-word-highlight-exceptions '("end")
@@ -81,7 +86,11 @@
   "Dummy for suppress bytecompiler warning.")
 
 (defvar current-word-overlay nil)
+(defvar before-word-overlay nil)
+(defvar after-word-overlay nil)
 (make-variable-buffer-local 'current-word-overlay)
+(make-variable-buffer-local 'before-word-overlay)
+(make-variable-buffer-local 'after-word-overlay)
 
 (defun current-word-highlight-mode-maybe ()
   "Fire up `current-word-highlight-mode' if not minibuffer"
@@ -94,10 +103,33 @@
     (overlay-put overlay 'face 'current-word-highlight-face)
     (setq current-word-overlay overlay)))
 
+(defun highlight-current-word-multi (before-start before-end after-start after-end)
+  (let* ((before-overlay (make-overlay before-start before-end nil nil t))
+         (after-overlay (make-overlay after-start after-end nil nil t)))
+    (overlay-put before-overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
+    (overlay-put after-overlay 'priority 1001)
+
+    (overlay-put before-overlay 'face 'current-word-highlight-sub-face)
+    (overlay-put after-overlay 'face 'current-word-highlight-sub-face)
+    (setq before-word-overlay before-overlay)
+    (setq after-word-overlay after-overlay)))
+
+(defun highlight-around-word (after-start after-end)
+  (let* ('(backward-word)
+         '(backward-word)
+         (before-start (point))
+         '(forward-word)
+         (before-end (point)))
+    (highlight-current-word-multi before-start before-end after-start after-end)))
+
 (defun unhighlight-current-word ()
   "Delete old highlight"
-  (if current-word-overlay
-      (delete-overlay current-word-overlay)))
+  (when current-word-overlay
+    (delete-overlay current-word-overlay))
+  (when before-word-overlay
+    (delete-overlay before-word-overlay))
+  (when after-word-overlay
+    (delete-overlay after-word-overlay)))
 
 (defun current-word-highlight-word-at-point ()
   "Highlight the word under the point."
@@ -112,7 +144,8 @@
                  '(forward-word)
                  (end (point)))
             (if (and (<= start original-point) (<= original-point end))
-                (highlight-current-word start end)))))))
+                (highlight-current-word start end)
+              (highlight-around-word start end)))))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
