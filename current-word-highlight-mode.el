@@ -115,9 +115,9 @@
     (setq after-word-overlay after-overlay)))
 
 (defun highlight-around-word (after-start after-end)
-  (let* ('(backward-word)
-         '(backward-word)
-         (before-start (point))
+  (backward-word)
+  (backward-word)
+  (let* ((before-start (point))
          '(forward-word)
          (before-end (point)))
     (highlight-current-word-multi before-start before-end after-start after-end)))
