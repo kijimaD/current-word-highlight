@@ -98,12 +98,23 @@
       (current-word-highlight-mode t)))
 
 (defun highlight-current-word (beg end)
+  "Highlight when a cursor is on a word."
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
     (overlay-put overlay 'face 'current-word-highlight-face)
     (setq current-word-overlay overlay)))
 
+(defun highlight-around-word (after-start after-end)
+  "Get a before word point."
+  (backward-word)
+  (backward-word)
+  (let* ((before-start (point))
+         '(forward-word)
+         (before-end (point)))
+    (highlight-current-word-multi before-start before-end after-start after-end)))
+
 (defun highlight-current-word-multi (before-start before-end after-start after-end)
+  "Highlight when a cursor is not on a word."
   (let* ((before-overlay (make-overlay before-start before-end nil nil t))
          (after-overlay (make-overlay after-start after-end nil nil t)))
     (overlay-put before-overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
@@ -114,16 +125,8 @@
     (setq before-word-overlay before-overlay)
     (setq after-word-overlay after-overlay)))
 
-(defun highlight-around-word (after-start after-end)
-  (backward-word)
-  (backward-word)
-  (let* ((before-start (point))
-         '(forward-word)
-         (before-end (point)))
-    (highlight-current-word-multi before-start before-end after-start after-end)))
-
 (defun unhighlight-current-word ()
-  "Delete old highlight"
+  "Delete old highlights"
   (when current-word-overlay
     (delete-overlay current-word-overlay))
   (when before-word-overlay
@@ -132,7 +135,7 @@
     (delete-overlay after-word-overlay)))
 
 (defun current-word-highlight-word-at-point ()
-  "Highlight the word under the point."
+  "Highlight the word under the point. If the point is not on a word, highlight the around word."
   (interactive)
   (unhighlight-current-word)
   (if current-word-highlight-mode
