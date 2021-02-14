@@ -62,7 +62,7 @@
   :group 'current-word-highlight
   :type '(repeat string))
 
-(defcustom current-word-highlight-time 0.1
+(defcustom current-word-highlight-time 0.4
   "Time after which to highlight the word at point."
   :group 'current-word-highlight
   :type 'float)
