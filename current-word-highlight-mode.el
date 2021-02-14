@@ -143,9 +143,8 @@
           (let* ((start (point))
                  '(forward-word)
                  (end (point)))
-            (if (and (<= start original-point) (<= original-point end))
-                (highlight-current-word start end)
-              (highlight-around-word start end)))))))
+            (cond ((and (<= start original-point) (<= original-point end)) (highlight-current-word start end))
+                  (t (highlight-around-word start end))))))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
