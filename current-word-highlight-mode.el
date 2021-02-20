@@ -65,12 +65,8 @@
 (defvar current-word-highlight-mode nil
   "Dummy for suppress bytecompiler warning.")
 
-(defvar current-word-overlay nil)
-(defvar before-word-overlay nil)
-(defvar after-word-overlay nil)
-(make-variable-buffer-local 'current-word-overlay)
-(make-variable-buffer-local 'before-word-overlay)
-(make-variable-buffer-local 'after-word-overlay)
+(defvar current-word-highlight-overlay-list nil)
+(make-variable-buffer-local 'current-word-highlight-overlay-list)
 
 (defun current-word-highlight-mode-maybe ()
   "Fire up `current-word-highlight-mode' if not minibuffer"
@@ -82,7 +78,7 @@
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
     (overlay-put overlay 'face 'current-word-highlight-face)
-    (setq current-word-overlay overlay)))
+    (push overlay current-word-highlight-overlay-list)))
 
 (defun highlight-around-word (after-start after-end)
   "Get a before word point."
@@ -102,17 +98,12 @@
 
     (overlay-put before-overlay 'face 'current-word-highlight-sub-face)
     (overlay-put after-overlay 'face 'current-word-highlight-sub-face)
-    (setq before-word-overlay before-overlay)
-    (setq after-word-overlay after-overlay)))
+    (push before-overlay current-word-highlight-overlay-list)
+    (push after-overlay current-word-highlight-overlay-list)))
 
 (defun unhighlight-current-word ()
   "Delete old highlights"
-  (when current-word-overlay
-    (delete-overlay current-word-overlay))
-  (when before-word-overlay
-    (delete-overlay before-word-overlay))
-  (when after-word-overlay
-    (delete-overlay after-word-overlay))
+  (mapc 'delete-overlay current-word-highlight-overlay-list)
   (remove-hook 'pre-command-hook #'unhighlight-current-word))
 
 (defun current-word-highlight-word-at-point ()
