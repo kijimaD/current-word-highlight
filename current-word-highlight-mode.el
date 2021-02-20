@@ -116,22 +116,31 @@
   (mapc 'delete-overlay current-word-highlight-overlay-list)
   (remove-hook 'pre-command-hook #'unhighlight-current-word))
 
+(defun cwh-get-current-word-point ()
+  (interactive)
+  (save-excursion
+    (let* ((points nil))
+      (forward-word)
+      (backward-word)
+      (let* ((start (point))
+             '(forward-word)
+             (end (point)))
+        (push end points)
+        (push start points)
+        points))))
+
 (defun current-word-highlight-word-at-point ()
   "Highlight the word under the point. If the point is not on a word, highlight the around word."
   (interactive)
   (unhighlight-current-word)
   (if current-word-highlight-mode
-      (save-excursion
-        (let ((original-point (point)))
-          (forward-word)
-          (backward-word)
-          (let* ((start (point))
-                 '(forward-word)
-                 (end (point)))
-            (cond ((and (<= start original-point) (<= original-point end))
-                   (highlight-current-word start end))
-                  (t (highlight-around-word start end))))
-          (add-hook 'pre-command-hook #'unhighlight-current-word)))))
+      (let* ((list (cwh-get-current-word-point))
+             (start (nth 0 list))
+             (end (nth 1 list)))
+        (cond ((and (<= start (point)) (<= (point) end))
+               (highlight-current-word start end))
+              (t (highlight-around-word start end)))
+        (add-hook 'pre-command-hook #'unhighlight-current-word))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
