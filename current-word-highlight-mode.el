@@ -59,9 +59,6 @@
   :group 'current-word-highlight
   :type 'float)
 
-(defvar current-word-highlight-regexp nil
-  "Buffer-local regexp to be current-word-highlighted.")
-
 (defvar current-word-highlight-global-timer nil
   "Timer to trigger highlighting.")
 
@@ -148,8 +145,7 @@
       (progn (unless current-word-highlight-global-timer
                (setq current-word-highlight-global-timer
                      (run-with-idle-timer current-word-highlight-time
-                                          :repeat 'current-word-highlight-word-at-point)))
-             (set (make-local-variable 'current-word-highlight-regexp) nil))
+                                          :repeat 'current-word-highlight-word-at-point))))
     (unhighlight-current-word)))
 
 (provide 'current-word-highlight-mode)
