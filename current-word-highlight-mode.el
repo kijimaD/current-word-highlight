@@ -1,18 +1,16 @@
-;;; current-word-highlight-mode.el --- Highlight the current word
+;;; current-word-highlight-mode.el --- Highlight the current word minor mode
 
 ;; Copyright (C) 2021 Kijima Daigo
+;; Created date 2021-02-10 00:30 +0900
 
-;; Author: Kijima Daigo
-;; URL: https://github.com/kijimaD/current-word-highlight-mode
+;; Author: Kijima Daigo <norimaking777@gmail.com>
+;; Version: 1.0.1
 ;; Package-Version: 20210210.0030
-;; Package-Commit: c1a872045fae39d73a1b19e6d41a5e793146bfdc
-;; Version: 1.0.0
-;; Created: 2021-02-10
-;; Keywords: convenience
+;; Package-Commit: 9839d71376866d975fc3afd56c5878755a055cd3
+;; Keywords: highlight face convenience word
+;; URL: https://github.com/kijimaD/current-word-highlight-mode
 
 ;; This file is NOT part of GNU Emacs.
-
-;;; License:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -33,11 +31,10 @@
 
 ;; Based on idle-highlight-mode by Phil Hagelberg, Cornelius Mika
 
-;; M-x current-Word-highlight-mode
+;; M-x current-word-highlight-mode or M-x global-current-word-highlight-mode
 
 ;; Enabling it in a hook is recommended. But you don't want it enabled
 ;; for all buffers, just programming ones.
-
 ;; Example:
 ;; (add-hook 'prog-mode-hook 'current-word-highlight-mode)
 
@@ -56,11 +53,6 @@
   '((t (:foreground "black" :background "HotPink")))
   "Face for sub highlight."
   :group 'current-word-highlight)
-
-(defcustom current-word-highlight-exceptions '("end")
-  "List of words to be excepted from highlighting."
-  :group 'current-word-highlight
-  :type '(repeat string))
 
 (defcustom current-word-highlight-time 0.4
   "Time after which to highlight the word at point."
