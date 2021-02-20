@@ -82,12 +82,22 @@
 
 (defun highlight-around-word (after-start after-end)
   "Get a before word point."
-  (backward-word)
-  (backward-word)
-  (let* ((before-start (point))
-         '(forward-word)
-         (before-end (point)))
-    (highlight-current-word-multi before-start before-end after-start after-end)))
+  (let* ((list (cwh-get-before))
+         (start (nth 0 list))
+         (end (nth 1 list)))
+    (highlight-current-word-multi start end after-start after-end)))
+
+(defun cwh-get-before ()
+  ""
+  (save-excursion
+    (backward-word)
+    (let* ((points nil)
+           (before-start (point))
+           '(forward-word)
+           (before-end (point)))
+      (push before-start points)
+      (push before-end points)
+      points)))
 
 (defun highlight-current-word-multi (before-start before-end after-start after-end)
   "Highlight when a cursor is not on a word."
