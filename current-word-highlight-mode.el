@@ -80,12 +80,6 @@
     (overlay-put overlay 'face 'current-word-highlight-face)
     (push overlay current-word-highlight-overlay-list)))
 
-(defun highlight-around-word (after-start after-end)
-  "Get a before word point."
-  (let* ((list (cwh-get-before))
-         (start (nth 0 list))
-         (end (nth 1 list)))
-    (highlight-current-word-multi start end after-start after-end)))
 
 (defun cwh-get-before ()
   ""
@@ -133,7 +127,10 @@
              (end (nth 1 list)))
         (cond ((and (<= start (point)) (<= (point) end))
                (highlight-current-word start end))
-              (t (highlight-around-word start end)))
+              (t (let* ((before-list (cwh-get-before-word-point))
+                        (before-start (nth 0 before-list))
+                        (before-end (nth 1 before-list)))
+                 (highlight-current-word-multi before-start before-end start end))))
         (add-hook 'pre-command-hook #'unhighlight-current-word))))
 
 ;;;###autoload
