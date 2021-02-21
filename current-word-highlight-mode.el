@@ -6,7 +6,7 @@
 ;; Author: Kijima Daigo <norimaking777@gmail.com>
 ;; Version: 1.0.1
 ;; Package-Version: 20210210.0030
-;; Package-Commit: 9839d71376866d975fc3afd56c5878755a055cd3
+;; Package-Commit: bceb7ce86bd6154ecd9ae9fbdb42e1d3c16bd84b
 ;; Keywords: highlight face convenience word
 ;; URL: https://github.com/kijimaD/current-word-highlight-mode
 
