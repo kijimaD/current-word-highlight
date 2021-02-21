@@ -85,7 +85,7 @@
       (list beg end))))
 
 (defun current-word-highlight-light-up (beg end face)
-  "Highlight when a cursor is on a word."
+  "Highlight from BEG to END with FACE."
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
     (overlay-put overlay 'face face)
