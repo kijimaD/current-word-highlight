@@ -65,12 +65,8 @@
 (defvar current-word-highlight-mode nil
   "Dummy for suppress bytecompiler warning.")
 
-(defvar current-word-overlay nil)
-(defvar before-word-overlay nil)
-(defvar after-word-overlay nil)
-(make-variable-buffer-local 'current-word-overlay)
-(make-variable-buffer-local 'before-word-overlay)
-(make-variable-buffer-local 'after-word-overlay)
+(defvar current-word-highlight-overlay-list nil)
+(make-variable-buffer-local 'current-word-highlight-overlay-list)
 
 (defun current-word-highlight-mode-maybe ()
   "Fire up `current-word-highlight-mode' if not minibuffer"
@@ -82,16 +78,26 @@
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
     (overlay-put overlay 'face 'current-word-highlight-face)
-    (setq current-word-overlay overlay)))
+    (push overlay current-word-highlight-overlay-list)))
 
-(defun highlight-around-word (after-start after-end)
-  "Get a before word point."
-  (backward-word)
-  (backward-word)
-  (let* ((before-start (point))
-         '(forward-word)
-         (before-end (point)))
-    (highlight-current-word-multi before-start before-end after-start after-end)))
+(defun cwh-get-current-word-point ()
+  "Get current word start and end. If cursor is not on word, get next word start and end."
+  (save-excursion
+      (forward-word)
+      (backward-word)
+      (let* ((start (point))
+             '(forward-word)
+             (end (point)))
+        (list start end))))
+
+(defun cwh-get-before-word-point ()
+  "Get before word start and end."
+  (save-excursion
+    (backward-word)
+    (let* ((start (point))
+           '(forward-word)
+           (end (point)))
+      (list start end))))
 
 (defun highlight-current-word-multi (before-start before-end after-start after-end)
   "Highlight when a cursor is not on a word."
@@ -102,17 +108,12 @@
 
     (overlay-put before-overlay 'face 'current-word-highlight-sub-face)
     (overlay-put after-overlay 'face 'current-word-highlight-sub-face)
-    (setq before-word-overlay before-overlay)
-    (setq after-word-overlay after-overlay)))
+    (push before-overlay current-word-highlight-overlay-list)
+    (push after-overlay current-word-highlight-overlay-list)))
 
 (defun unhighlight-current-word ()
   "Delete old highlights"
-  (when current-word-overlay
-    (delete-overlay current-word-overlay))
-  (when before-word-overlay
-    (delete-overlay before-word-overlay))
-  (when after-word-overlay
-    (delete-overlay after-word-overlay))
+  (mapc 'delete-overlay current-word-highlight-overlay-list)
   (remove-hook 'pre-command-hook #'unhighlight-current-word))
 
 (defun current-word-highlight-word-at-point ()
@@ -120,17 +121,16 @@
   (interactive)
   (unhighlight-current-word)
   (if current-word-highlight-mode
-      (save-excursion
-        (let ((original-point (point)))
-          (forward-word)
-          (backward-word)
-          (let* ((start (point))
-                 '(forward-word)
-                 (end (point)))
-            (cond ((and (<= start original-point) (<= original-point end))
-                   (highlight-current-word start end))
-                  (t (highlight-around-word start end))))
-          (add-hook 'pre-command-hook #'unhighlight-current-word)))))
+      (let* ((list (cwh-get-current-word-point))
+             (start (nth 0 list))
+             (end (nth 1 list)))
+        (cond ((and (<= start (point)) (<= (point) end))
+               (highlight-current-word start end))
+              (t (let* ((before-list (cwh-get-before-word-point))
+                        (before-start (nth 0 before-list))
+                        (before-end (nth 1 before-list)))
+                 (highlight-current-word-multi before-start before-end start end))))
+        (add-hook 'pre-command-hook #'unhighlight-current-word))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
