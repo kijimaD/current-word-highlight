@@ -5,8 +5,6 @@
 
 ;; Author: Kijima Daigo <norimaking777@gmail.com>
 ;; Version: 1.0.1
-;; Package-Version: 20210210.0030
-;; Package-Commit: 9839d71376866d975fc3afd56c5878755a055cd3
 ;; Keywords: highlight face convenience word
 ;; URL: https://github.com/kijimaD/current-word-highlight-mode
 
@@ -28,15 +26,13 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-
-;; Based on idle-highlight-mode by Phil Hagelberg, Cornelius Mika
-
 ;; M-x current-word-highlight-mode or M-x global-current-word-highlight-mode
-
 ;; Enabling it in a hook is recommended.  But you don't want it enabled
 ;; for all buffers, just programming ones.
 ;; Example:
 ;; (add-hook 'prog-mode-hook 'current-word-highlight-mode)
+
+;; I referred to idle-highlight-mode(by Phil Hagelberg, Cornelius Mika) for highlighting and commentary.
 
 ;;; Code:
 
