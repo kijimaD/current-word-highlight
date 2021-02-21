@@ -73,13 +73,6 @@
   (if (and (not (minibufferp (current-buffer))))
       (current-word-highlight-mode t)))
 
-(defun highlight-current-word (beg end)
-  "Highlight when a cursor is on a word."
-  (let* ((overlay (make-overlay beg end nil nil t)))
-    (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
-    (overlay-put overlay 'face 'current-word-highlight-face)
-    (push overlay current-word-highlight-overlay-list)))
-
 (defun cwh-get-current-word-point ()
   "Get current word beg and end.  If cursor is not on word, get next word beg and end."
   (save-excursion
@@ -98,6 +91,13 @@
            '(forward-word)
            (end (point)))
       (list beg end))))
+
+(defun current-word-highlight-light-up (beg end)
+  "Highlight when a cursor is on a word."
+  (let* ((overlay (make-overlay beg end nil nil t)))
+    (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
+    (overlay-put overlay 'face 'current-word-highlight-face)
+    (push overlay current-word-highlight-overlay-list)))
 
 (defun highlight-current-word-multi (before-beg before-end after-beg after-end)
   "Highlight when a cursor is not on a word."
@@ -125,7 +125,7 @@
              (beg (nth 0 list))
              (end (nth 1 list)))
         (cond ((and (<= beg (point)) (<= (point) end))
-               (highlight-current-word beg end))
+               (current-word-highlight-light-up beg end))
               (t (let* ((before-list (cwh-get-before-word-point))
                         (before-beg (nth 0 before-list))
                         (before-end (nth 1 before-list)))
