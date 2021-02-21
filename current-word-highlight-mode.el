@@ -83,7 +83,7 @@
              (end (point)))
         (list beg end))))
 
-(defun cwh-get-before-word-point ()
+(defun current-word-highlight-get-before-points ()
   "Get before word beg and end."
   (save-excursion
     (backward-word)
@@ -126,7 +126,7 @@
              (end (nth 1 list)))
         (cond ((and (<= beg (point)) (<= (point) end))
                (current-word-highlight-light-up beg end))
-              (t (let* ((before-list (cwh-get-before-word-point))
+              (t (let* ((before-list (current-word-highlight-get-before-points))
                         (before-beg (nth 0 before-list))
                         (before-end (nth 1 before-list)))
                  (highlight-current-word-multi before-beg before-end beg end))))
