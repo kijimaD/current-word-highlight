@@ -91,13 +91,10 @@
   ""
   (save-excursion
     (backward-word)
-    (let* ((points nil)
-           (before-start (point))
+    (let* ((start (point))
            '(forward-word)
-           (before-end (point)))
-      (push before-start points)
-      (push before-end points)
-      points)))
+           (end (point)))
+      (list start end))))
 
 (defun highlight-current-word-multi (before-start before-end after-start after-end)
   "Highlight when a cursor is not on a word."
@@ -119,15 +116,12 @@
 (defun cwh-get-current-word-point ()
   (interactive)
   (save-excursion
-    (let* ((points nil))
       (forward-word)
       (backward-word)
       (let* ((start (point))
              '(forward-word)
              (end (point)))
-        (push end points)
-        (push start points)
-        points))))
+        (list start end))))
 
 (defun current-word-highlight-word-at-point ()
   "Highlight the word under the point. If the point is not on a word, highlight the around word."
