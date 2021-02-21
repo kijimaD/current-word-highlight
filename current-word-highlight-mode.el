@@ -81,28 +81,28 @@
     (push overlay current-word-highlight-overlay-list)))
 
 (defun cwh-get-current-word-point ()
-  "Get current word start and end.  If cursor is not on word, get next word start and end."
+  "Get current word beg and end.  If cursor is not on word, get next word beg and end."
   (save-excursion
       (forward-word)
       (backward-word)
-      (let* ((start (point))
+      (let* ((beg (point))
              '(forward-word)
              (end (point)))
-        (list start end))))
+        (list beg end))))
 
 (defun cwh-get-before-word-point ()
-  "Get before word start and end."
+  "Get before word beg and end."
   (save-excursion
     (backward-word)
-    (let* ((start (point))
+    (let* ((beg (point))
            '(forward-word)
            (end (point)))
-      (list start end))))
+      (list beg end))))
 
-(defun highlight-current-word-multi (before-start before-end after-start after-end)
+(defun highlight-current-word-multi (before-beg before-end after-beg after-end)
   "Highlight when a cursor is not on a word."
-  (let* ((before-overlay (make-overlay before-start before-end nil nil t))
-         (after-overlay (make-overlay after-start after-end nil nil t)))
+  (let* ((before-overlay (make-overlay before-beg before-end nil nil t))
+         (after-overlay (make-overlay after-beg after-end nil nil t)))
     (overlay-put before-overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
     (overlay-put after-overlay 'priority 1001)
 
@@ -122,14 +122,14 @@
   (unhighlight-current-word)
   (if current-word-highlight-mode
       (let* ((list (cwh-get-current-word-point))
-             (start (nth 0 list))
+             (beg (nth 0 list))
              (end (nth 1 list)))
-        (cond ((and (<= start (point)) (<= (point) end))
-               (highlight-current-word start end))
+        (cond ((and (<= beg (point)) (<= (point) end))
+               (highlight-current-word beg end))
               (t (let* ((before-list (cwh-get-before-word-point))
-                        (before-start (nth 0 before-list))
+                        (before-beg (nth 0 before-list))
                         (before-end (nth 1 before-list)))
-                 (highlight-current-word-multi before-start before-end start end))))
+                 (highlight-current-word-multi before-beg before-end beg end))))
         (add-hook 'pre-command-hook #'unhighlight-current-word))))
 
 ;;;###autoload
