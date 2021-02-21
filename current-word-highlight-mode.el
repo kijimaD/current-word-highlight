@@ -99,8 +99,8 @@
     (overlay-put overlay 'face 'current-word-highlight-face)
     (push overlay current-word-highlight-overlay-list)))
 
-(defun highlight-current-word-multi (before-beg before-end after-beg after-end)
-  "Highlight when a cursor is not on a word."
+(defun current-word-highlight-light-up-multi (before-beg before-end after-beg after-end)
+  "Highlight around words."
   (let* ((before-overlay (make-overlay before-beg before-end nil nil t))
          (after-overlay (make-overlay after-beg after-end nil nil t)))
     (overlay-put before-overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
@@ -129,7 +129,7 @@
               (t (let* ((before-list (current-word-highlight-get-before-points))
                         (before-beg (nth 0 before-list))
                         (before-end (nth 1 before-list)))
-                 (highlight-current-word-multi before-beg before-end beg end))))
+                 (current-word-highlight-light-up-multi before-beg before-end beg end))))
         (add-hook 'pre-command-hook #'unhighlight-current-word))))
 
 ;;;###autoload
