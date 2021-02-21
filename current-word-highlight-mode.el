@@ -80,9 +80,18 @@
     (overlay-put overlay 'face 'current-word-highlight-face)
     (push overlay current-word-highlight-overlay-list)))
 
+(defun cwh-get-current-word-point ()
+  "Get current word start and end. If cursor is not on word, get next word start and end."
+  (save-excursion
+      (forward-word)
+      (backward-word)
+      (let* ((start (point))
+             '(forward-word)
+             (end (point)))
+        (list start end))))
 
-(defun cwh-get-before ()
-  ""
+(defun cwh-get-before-word-point ()
+  "Get before word start and end."
   (save-excursion
     (backward-word)
     (let* ((start (point))
@@ -106,16 +115,6 @@
   "Delete old highlights"
   (mapc 'delete-overlay current-word-highlight-overlay-list)
   (remove-hook 'pre-command-hook #'unhighlight-current-word))
-
-(defun cwh-get-current-word-point ()
-  (interactive)
-  (save-excursion
-      (forward-word)
-      (backward-word)
-      (let* ((start (point))
-             '(forward-word)
-             (end (point)))
-        (list start end))))
 
 (defun current-word-highlight-word-at-point ()
   "Highlight the word under the point. If the point is not on a word, highlight the around word."
