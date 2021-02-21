@@ -92,24 +92,12 @@
            (end (point)))
       (list beg end))))
 
-(defun current-word-highlight-light-up (beg end)
+(defun current-word-highlight-light-up (beg end face)
   "Highlight when a cursor is on a word."
   (let* ((overlay (make-overlay beg end nil nil t)))
     (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
-    (overlay-put overlay 'face 'current-word-highlight-face)
+    (overlay-put overlay 'face face)
     (push overlay current-word-highlight-overlay-list)))
-
-(defun current-word-highlight-light-up-multi (before-beg before-end after-beg after-end)
-  "Highlight around words."
-  (let* ((before-overlay (make-overlay before-beg before-end nil nil t))
-         (after-overlay (make-overlay after-beg after-end nil nil t)))
-    (overlay-put before-overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
-    (overlay-put after-overlay 'priority 1001)
-
-    (overlay-put before-overlay 'face 'current-word-highlight-sub-face)
-    (overlay-put after-overlay 'face 'current-word-highlight-sub-face)
-    (push before-overlay current-word-highlight-overlay-list)
-    (push after-overlay current-word-highlight-overlay-list)))
 
 (defun unhighlight-current-word ()
   "Delete old highlight."
@@ -125,11 +113,12 @@
              (beg (nth 0 list))
              (end (nth 1 list)))
         (cond ((and (<= beg (point)) (<= (point) end))
-               (current-word-highlight-light-up beg end))
+               (current-word-highlight-light-up beg end 'current-word-highlight-face))
               (t (let* ((before-list (current-word-highlight-get-before-points))
                         (before-beg (nth 0 before-list))
                         (before-end (nth 1 before-list)))
-                 (current-word-highlight-light-up-multi before-beg before-end beg end))))
+                   (current-word-highlight-light-up beg end 'current-word-highlight-sub-face)
+                   (current-word-highlight-light-up before-beg before-end 'current-word-highlight-sub-face))))
         (add-hook 'pre-command-hook #'unhighlight-current-word))))
 
 ;;;###autoload
