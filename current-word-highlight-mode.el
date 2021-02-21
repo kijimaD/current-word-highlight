@@ -73,7 +73,7 @@
   (if (and (not (minibufferp (current-buffer))))
       (current-word-highlight-mode t)))
 
-(defun cwh-get-current-word-point ()
+(defun current-word-highlight-get-current-points ()
   "Get current word beg and end.  If cursor is not on word, get next word beg and end."
   (save-excursion
       (forward-word)
@@ -121,7 +121,7 @@
   (interactive)
   (unhighlight-current-word)
   (if current-word-highlight-mode
-      (let* ((list (cwh-get-current-word-point))
+      (let* ((list (current-word-highlight-get-current-points))
              (beg (nth 0 list))
              (end (nth 1 list)))
         (cond ((and (<= beg (point)) (<= (point) end))
