@@ -77,14 +77,10 @@
   "Get current word beg and end.  If cursor is not on word, get next word beg and end."
   (save-excursion
       (forward-word)
-      (backward-word)
-      (let* ((beg (point))
-             '(forward-word)
-             (end (point)))
-        (list beg end))))
+      (current-word-highlight-get-before-points)))
 
 (defun current-word-highlight-get-before-points ()
-  "Get before word beg and end."
+  "Get before word beg and end.  This function is used when cursor being not on word."
   (save-excursion
     (backward-word)
     (let* ((beg (point))
