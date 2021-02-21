@@ -33,7 +33,7 @@
 
 ;; M-x current-word-highlight-mode or M-x global-current-word-highlight-mode
 
-;; Enabling it in a hook is recommended. But you don't want it enabled
+;; Enabling it in a hook is recommended.  But you don't want it enabled
 ;; for all buffers, just programming ones.
 ;; Example:
 ;; (add-hook 'prog-mode-hook 'current-word-highlight-mode)
@@ -69,7 +69,7 @@
 (make-variable-buffer-local 'current-word-highlight-overlay-list)
 
 (defun current-word-highlight-mode-maybe ()
-  "Fire up `current-word-highlight-mode' if not minibuffer"
+  "Fire up `current-word-highlight-mode' if not minibuffer."
   (if (and (not (minibufferp (current-buffer))))
       (current-word-highlight-mode t)))
 
@@ -81,7 +81,7 @@
     (push overlay current-word-highlight-overlay-list)))
 
 (defun cwh-get-current-word-point ()
-  "Get current word start and end. If cursor is not on word, get next word start and end."
+  "Get current word start and end.  If cursor is not on word, get next word start and end."
   (save-excursion
       (forward-word)
       (backward-word)
@@ -112,12 +112,12 @@
     (push after-overlay current-word-highlight-overlay-list)))
 
 (defun unhighlight-current-word ()
-  "Delete old highlights"
+  "Delete old highlight."
   (mapc 'delete-overlay current-word-highlight-overlay-list)
   (remove-hook 'pre-command-hook #'unhighlight-current-word))
 
 (defun current-word-highlight-word-at-point ()
-  "Highlight the word under the point. If the point is not on a word, highlight the around word."
+  "Highlight the word under the point.  If the point is not on a word, highlight the around word."
   (interactive)
   (unhighlight-current-word)
   (if current-word-highlight-mode
