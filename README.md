@@ -1,7 +1,7 @@
 # current-word-highlight-mode.el
 
 A minor mode for Emacs.
-* Highlight current word.
+* Highlight current word. If the point is not on a word, highlight the around word.
 * Can use <a href="https://github.com/jcs-elpa/auto-highlight-symbol">jcs-elpa/auto-highlight-symbol</a> at the same time.
 
 [![Image from Gyazo](https://i.gyazo.com/0a604559d7c56a9c9d64da3b5973070c.gif)](https://gyazo.com/0a604559d7c56a9c9d64da3b5973070c)

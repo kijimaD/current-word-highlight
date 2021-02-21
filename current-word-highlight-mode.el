@@ -95,15 +95,15 @@
     (overlay-put overlay 'face face)
     (push overlay current-word-highlight-overlay-list)))
 
-(defun unhighlight-current-word ()
+(defun current-word-highlight-unhighlight ()
   "Delete old highlight."
   (mapc 'delete-overlay current-word-highlight-overlay-list)
-  (remove-hook 'pre-command-hook #'unhighlight-current-word))
+  (remove-hook 'pre-command-hook #'current-word-highlight-unhighlight))
 
 (defun current-word-highlight-word-at-point ()
   "Highlight the word under the point.  If the point is not on a word, highlight the around word."
   (interactive)
-  (unhighlight-current-word)
+  (current-word-highlight-unhighlight)
   (if current-word-highlight-mode
       (let* ((list (current-word-highlight-get-current-points))
              (beg (nth 0 list))
@@ -115,7 +115,7 @@
                         (before-end (nth 1 before-list)))
                    (current-word-highlight-light-up beg end 'current-word-highlight-sub-face)
                    (current-word-highlight-light-up before-beg before-end 'current-word-highlight-sub-face))))
-        (add-hook 'pre-command-hook #'unhighlight-current-word))))
+        (add-hook 'pre-command-hook #'current-word-highlight-unhighlight))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
@@ -131,7 +131,7 @@
                (setq current-word-highlight-global-timer
                      (run-with-idle-timer current-word-highlight-time
                                           :repeat 'current-word-highlight-word-at-point))))
-    (unhighlight-current-word)))
+    (current-word-highlight-unhighlight)))
 
 (provide 'current-word-highlight-mode)
 ;;; current-word-highlight-mode.el ends here
