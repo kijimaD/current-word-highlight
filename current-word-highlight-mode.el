@@ -87,7 +87,13 @@
   (current-word-highlight-unhighlight)
   (if current-word-highlight-mode
       (cond ((bounds-of-thing-at-point 'word)
-             (current-word-highlight-light-up 'current-word-highlight-face))
+             (current-word-highlight-light-up 'current-word-highlight-face)
+             (save-excursion
+               (forward-to-word -1)
+               (current-word-highlight-light-up 'current-word-highlight-sub-face))
+             (save-excursion
+               (forward-to-word 1)
+               (current-word-highlight-light-up 'current-word-highlight-sub-face)))
             (t  (save-excursion
                   (backward-word)
                   (current-word-highlight-light-up 'current-word-highlight-sub-face))
