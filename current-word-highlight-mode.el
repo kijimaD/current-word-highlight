@@ -69,24 +69,9 @@
   (if (and (not (minibufferp (current-buffer))))
       (current-word-highlight-mode t)))
 
-(defun current-word-highlight-get-current-points ()
-  "Get current word beg and end.  If cursor is not on word, get next word beg and end."
-  (save-excursion
-      (forward-word)
-      (current-word-highlight-get-before-points)))
-
-(defun current-word-highlight-get-before-points ()
-  "Get before word beg and end.  This function is used when cursor being not on word."
-  (save-excursion
-    (backward-word)
-    (let* ((beg (point))
-           '(forward-word)
-           (end (point)))
-      (list beg end))))
-
-(defun current-word-highlight-light-up (beg end face)
-  "Highlight from BEG to END with FACE."
-  (let* ((overlay (make-overlay beg end nil nil t)))
+(defun current-word-highlight-light-up (face)
+  "Highlight the current word with FACE."
+  (let* ((overlay (make-overlay (car (bounds-of-thing-at-point 'word)) (cdr (bounds-of-thing-at-point 'word)) nil nil t)))
     (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
     (overlay-put overlay 'face face)
     (push overlay current-word-highlight-overlay-list)))
@@ -101,17 +86,15 @@
   (interactive)
   (current-word-highlight-unhighlight)
   (if current-word-highlight-mode
-      (let* ((list (current-word-highlight-get-current-points))
-             (beg (nth 0 list))
-             (end (nth 1 list)))
-        (cond ((and (<= beg (point)) (<= (point) end))
-               (current-word-highlight-light-up beg end 'current-word-highlight-face))
-              (t (let* ((before-list (current-word-highlight-get-before-points))
-                        (before-beg (nth 0 before-list))
-                        (before-end (nth 1 before-list)))
-                   (current-word-highlight-light-up beg end 'current-word-highlight-sub-face)
-                   (current-word-highlight-light-up before-beg before-end 'current-word-highlight-sub-face))))
-        (add-hook 'pre-command-hook #'current-word-highlight-unhighlight))))
+      (cond ((bounds-of-thing-at-point 'word)
+             (current-word-highlight-light-up 'current-word-highlight-face))
+            (t  (save-excursion
+                  (backward-word)
+                  (current-word-highlight-light-up 'current-word-highlight-sub-face))
+                (save-excursion
+                  (forward-word)
+                  (current-word-highlight-light-up 'current-word-highlight-sub-face)))))
+  (add-hook 'pre-command-hook #'current-word-highlight-unhighlight))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
