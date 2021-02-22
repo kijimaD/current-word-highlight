@@ -71,10 +71,11 @@
 
 (defun current-word-highlight-light-up (face)
   "Highlight the current word with FACE."
-  (let* ((overlay (make-overlay (car (bounds-of-thing-at-point 'word)) (cdr (bounds-of-thing-at-point 'word)) nil nil t)))
-    (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
-    (overlay-put overlay 'face face)
-    (push overlay current-word-highlight-overlay-list)))
+  (if (bounds-of-thing-at-point 'word)
+      (let* ((overlay (make-overlay (car (bounds-of-thing-at-point 'word)) (cdr (bounds-of-thing-at-point 'word)) nil nil t)))
+        (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
+        (overlay-put overlay 'face face)
+        (push overlay current-word-highlight-overlay-list))))
 
 (defun current-word-highlight-around ()
   "Highlight around words"
@@ -95,10 +96,9 @@
   (interactive)
   (current-word-highlight-unhighlight)
   (if current-word-highlight-mode
-      (cond ((bounds-of-thing-at-point 'word)
-             (current-word-highlight-light-up 'current-word-highlight-face)
-             (current-word-highlight-around))
-            (t  (current-word-highlight-around))))
+      (progn
+        (current-word-highlight-light-up 'current-word-highlight-face)
+        (current-word-highlight-around)))
   (add-hook 'pre-command-hook #'current-word-highlight-unhighlight))
 
 ;;;###autoload
