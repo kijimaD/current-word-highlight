@@ -76,6 +76,15 @@
     (overlay-put overlay 'face face)
     (push overlay current-word-highlight-overlay-list)))
 
+(defun current-word-highlight-around ()
+  "Highlight around words"
+  (save-excursion
+    (forward-to-word -1)
+    (current-word-highlight-light-up 'current-word-highlight-sub-face))
+  (save-excursion
+    (forward-to-word 1)
+    (current-word-highlight-light-up 'current-word-highlight-sub-face)))
+
 (defun current-word-highlight-unhighlight ()
   "Delete old highlight."
   (mapc 'delete-overlay current-word-highlight-overlay-list)
@@ -88,18 +97,8 @@
   (if current-word-highlight-mode
       (cond ((bounds-of-thing-at-point 'word)
              (current-word-highlight-light-up 'current-word-highlight-face)
-             (save-excursion
-               (forward-to-word -1)
-               (current-word-highlight-light-up 'current-word-highlight-sub-face))
-             (save-excursion
-               (forward-to-word 1)
-               (current-word-highlight-light-up 'current-word-highlight-sub-face)))
-            (t  (save-excursion
-                  (backward-word)
-                  (current-word-highlight-light-up 'current-word-highlight-sub-face))
-                (save-excursion
-                  (forward-word)
-                  (current-word-highlight-light-up 'current-word-highlight-sub-face)))))
+             (current-word-highlight-around))
+            (t  (current-word-highlight-around))))
   (add-hook 'pre-command-hook #'current-word-highlight-unhighlight))
 
 ;;;###autoload
