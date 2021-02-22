@@ -37,8 +37,8 @@
 ;;; Code:
 
 (defgroup current-word-highlight nil
-  "Highlight other occurrences of the word at point."
-  :group 'current-word-highlight)
+  "Highlight the word on the cursor."
+  :group 'convenience)
 
 (defface current-word-highlight-face
   '((t (:foreground "black" :background "DeepSkyBlue")))
