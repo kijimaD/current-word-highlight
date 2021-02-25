@@ -102,11 +102,6 @@
   (add-hook 'pre-command-hook #'current-word-highlight-unhighlight))
 
 ;;;###autoload
-(define-globalized-minor-mode global-current-word-highlight-mode
-  current-word-highlight-mode current-word-highlight-mode-maybe
-  :group 'current-word-highlight)
-
-;;;###autoload
 (define-minor-mode current-word-highlight-mode
   "Current-Word-Highlight Minor Mode"
   :group 'current-word-highlight
@@ -116,6 +111,11 @@
                      (run-with-idle-timer current-word-highlight-time
                                           :repeat 'current-word-highlight-word-at-point))))
     (current-word-highlight-unhighlight)))
+
+;;;###autoload
+(define-globalized-minor-mode global-current-word-highlight-mode
+  current-word-highlight-mode current-word-highlight-mode-maybe
+  :group 'current-word-highlight)
 
 (provide 'current-word-highlight)
 ;;; current-word-highlight.el ends here
