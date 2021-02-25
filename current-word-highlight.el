@@ -62,7 +62,7 @@
 (make-variable-buffer-local 'current-word-highlight-overlay-list)
 
 (defun current-word-highlight-mode-maybe ()
-  "Fire up `current-word-highlight-mode' if not minibuffer."
+  "Fire up 'current-word-highlight-mode if not minibuffer."
   (if (and (not (minibufferp (current-buffer))))
       (current-word-highlight-mode t)))
 
@@ -75,7 +75,7 @@
         (push overlay current-word-highlight-overlay-list))))
 
 (defun current-word-highlight-around ()
-  "Highlight around words"
+  "Highlight around words."
   (save-excursion
     (forward-to-word -1)
     (current-word-highlight-light-up 'current-word-highlight-sub-face))
