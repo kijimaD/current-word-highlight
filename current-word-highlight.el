@@ -58,9 +58,6 @@
 (defvar current-word-highlight-global-timer nil
   "Timer to trigger highlighting.")
 
-(defvar current-word-highlight-mode nil
-  "Dummy for suppress bytecompiler warning.")
-
 (defvar current-word-highlight-overlay-list nil)
 (make-variable-buffer-local 'current-word-highlight-overlay-list)
 
