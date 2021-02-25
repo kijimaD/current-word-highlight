@@ -1,4 +1,4 @@
-;;; current-word-highlight-mode.el --- Highlight the current word minor mode
+;;; current-word-highlight.el --- Highlight the current word minor mode
 
 ;; Copyright (C) 2021 Kijima Daigo
 ;; Created date 2021-02-10 00:30 +0900
@@ -6,7 +6,7 @@
 ;; Author: Kijima Daigo <norimaking777@gmail.com>
 ;; Version: 1.0.1
 ;; Keywords: highlight face convenience word
-;; URL: https://github.com/kijimaD/current-word-highlight-mode
+;; URL: https://github.com/kijimaD/current-word-highlight
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -117,5 +117,5 @@
                                           :repeat 'current-word-highlight-word-at-point))))
     (current-word-highlight-unhighlight)))
 
-(provide 'current-word-highlight-mode)
-;;; current-word-highlight-mode.el ends here
+(provide 'current-word-highlight)
+;;; current-word-highlight.el ends here
