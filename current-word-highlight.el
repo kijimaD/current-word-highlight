@@ -61,6 +61,8 @@
 (defvar current-word-highlight-overlay-list nil)
 (make-variable-buffer-local 'current-word-highlight-overlay-list)
 
+(defvar current-word-highlight-mode nil)
+
 (defun current-word-highlight-mode-maybe ()
   "Fire up 'current-word-highlight-mode if not minibuffer."
   (if (and (not (minibufferp (current-buffer))))
