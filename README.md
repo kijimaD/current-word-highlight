@@ -4,9 +4,12 @@
 
 A minor mode for Emacs.
 * Highlight current word(blue) and around word(pink).
+* This will guide you to move words in languages without delimiters(ex. Japanese).
 * Can use <a href="https://github.com/jcs-elpa/auto-highlight-symbol">jcs-elpa/auto-highlight-symbol</a> at the same time.
 
 [![Image from Gyazo](https://i.gyazo.com/b41a1da274a2ab513a0a6098673e046a.gif)](https://gyazo.com/b41a1da274a2ab513a0a6098673e046a)
+
+[![Image from Gyazo](https://i.gyazo.com/d189e134f52185259a5754a7ba07d816.gif)](https://gyazo.com/d189e134f52185259a5754a7ba07d816)
 
 With <a href="https://github.com/jcs-elpa/auto-highlight-symbol">jcs-elpa/auto-highlight-symbol</a>.
 
