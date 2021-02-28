@@ -98,6 +98,12 @@
   (mapc 'delete-overlay current-word-highlight-overlay-list)
   (remove-hook 'pre-command-hook #'current-word-highlight-unhighlight))
 
+(defun current-word-highlight-cancel-timer ()
+  "Cancel timer."
+  (when (timerp current-word-highlight-global-timer)
+    (cancel-timer current-word-highlight-global-timer)
+    (setq current-word-highlight-global-timer nil)))
+
 (defun current-word-highlight-word-at-point ()
   "Highlight the word under the point.  If the point is not on a word, highlight the around word."
   (interactive)
@@ -117,7 +123,9 @@
                (setq current-word-highlight-global-timer
                      (run-with-idle-timer current-word-highlight-time
                                           :repeat 'current-word-highlight-word-at-point))))
-    (current-word-highlight-unhighlight)))
+    (progn
+      (current-word-highlight-cancel-timer)
+      (current-word-highlight-unhighlight))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
