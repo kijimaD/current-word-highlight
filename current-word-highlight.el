@@ -78,15 +78,20 @@
 
 (defun current-word-highlight-around ()
   "Highlight around words."
+  ;; (forward-to-word 1) don't work well in Japanese(or any other languages ​​without delimiters).
   (save-excursion
-    (unless (bounds-of-thing-at-point 'word) (forward-word -1))
-    (unless (beginning-of-thing 'word) (forward-word -1))
-    (forward-char -1)
+    (if (bounds-of-thing-at-point 'word)
+        (if (beginning-of-thing 'word)
+          (forward-char -1))
+      (progn (forward-word -1)
+             (forward-char 1)))
     (current-word-highlight-light-up 'current-word-highlight-sub-face))
   (save-excursion
-    (unless (bounds-of-thing-at-point 'word) (forward-word 1))
-    (unless (end-of-thing 'word) (forward-word 1))
-    (forward-char 1)
+    (if (bounds-of-thing-at-point 'word)
+        (if (end-of-thing 'word)
+          (forward-char 1))
+      (progn (forward-word 1)
+             (forward-char -1)))
     (current-word-highlight-light-up 'current-word-highlight-sub-face)))
 
 (defun current-word-highlight-unhighlight ()
