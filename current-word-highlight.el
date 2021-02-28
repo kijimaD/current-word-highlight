@@ -36,6 +36,8 @@
 
 ;;; Code:
 
+(require 'thingatpt)
+
 (defgroup current-word-highlight nil
   "Highlight the word on the cursor."
   :group 'convenience)
