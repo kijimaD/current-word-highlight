@@ -43,12 +43,24 @@
   :group 'convenience)
 
 (defface current-word-highlight-face
-  '((t (:foreground "black" :background "DeepSkyBlue")))
+  '((((class color)
+      (background dark))
+     (:background "DodgerBlue"))
+    (((class color)
+      (background light))
+     (:background "DeepSkyBlue"))
+    (t ()))
   "Face for main highlight."
   :group 'current-word-highlight)
 
 (defface current-word-highlight-sub-face
-  '((t (:foreground "black" :background "HotPink")))
+  '((((class color)
+      (background dark))
+     (:background "MediumVioletRed"))
+    (((class color)
+      (background light))
+     (:background "HotPink"))
+    (t ()))
   "Face for sub highlight."
   :group 'current-word-highlight)
 
