@@ -79,10 +79,14 @@
 (defun current-word-highlight-around ()
   "Highlight around words."
   (save-excursion
-    (forward-to-word -1)
+    (unless (bounds-of-thing-at-point 'word) (forward-word -1))
+    (unless (beginning-of-thing 'word) (forward-word -1))
+    (forward-char -1)
     (current-word-highlight-light-up 'current-word-highlight-sub-face))
   (save-excursion
-    (forward-to-word 1)
+    (unless (bounds-of-thing-at-point 'word) (forward-word 1))
+    (unless (end-of-thing 'word) (forward-word 1))
+    (forward-char 1)
     (current-word-highlight-light-up 'current-word-highlight-sub-face)))
 
 (defun current-word-highlight-unhighlight ()
