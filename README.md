@@ -1,5 +1,6 @@
 # current-word-highlight.el
 
+[![MELPA](https://melpa.org/packages/current-word-highlight-badge.svg)](https://melpa.org/#/current-word-highlight)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 A minor mode for Emacs.
