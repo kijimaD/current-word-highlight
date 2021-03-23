@@ -4,7 +4,7 @@
 ;; Created date 2021-02-10 00:30 +0900
 
 ;; Author: Kijima Daigo <norimaking777@gmail.com>
-;; Version: 1.0.1
+;; Version: 1.0.4
 ;; Keywords: highlight face convenience word
 ;; URL: https://github.com/kijimaD/current-word-highlight
 
