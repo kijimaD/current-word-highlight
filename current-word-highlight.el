@@ -75,6 +75,15 @@
 (defvar current-word-highlight-overlay-list nil)
 (make-variable-buffer-local 'current-word-highlight-overlay-list)
 
+(defvar current-word-highlight-context t
+  "Highlight the context also if non-nil.
+Default is to highlight.")
+
+(defvar current-word-highlight-thing 'word
+  "Thing to highlight.
+One of the possible things at point see `thingatpt'.
+Default is 'word")
+
 (defvar current-word-highlight-mode nil)
 
 (defun current-word-highlight-mode-maybe ()
@@ -84,9 +93,12 @@
 
 (defun current-word-highlight-light-up (face)
   "Highlight the current word with FACE."
-  (if (bounds-of-thing-at-point 'word)
-      (let* ((overlay (make-overlay (car (bounds-of-thing-at-point 'word)) (cdr (bounds-of-thing-at-point 'word)) nil nil t)))
-        (overlay-put overlay 'priority 1001) ; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
+  (if (bounds-of-thing-at-point current-word-highlight-thing)
+      (let* ((overlay (make-overlay
+                       (car (bounds-of-thing-at-point current-word-highlight-thing))
+                       (cdr (bounds-of-thing-at-point current-word-highlight-thing)) nil nil t)))
+        ;; Display word-highlight before auto-highlight-symbol-mode. AHS's priority is 1000.
+        (overlay-put overlay 'priority 1001)
         (overlay-put overlay 'face face)
         (push overlay current-word-highlight-overlay-list))))
 
@@ -94,14 +106,16 @@
   "Highlight around words."
   ;; (forward-to-word 1) don't work well in language ​​without delimiters(ex. Japanese, Chinese).
   (save-excursion
-    (if (and (bounds-of-thing-at-point 'word) (beginning-of-thing 'word))
+    (if (and (bounds-of-thing-at-point current-word-highlight-thing)
+             (beginning-of-thing current-word-highlight-thing))
         (forward-char -1))
     (forward-word -1)
     (forward-char 1)
     (current-word-highlight-light-up 'current-word-highlight-sub-face))
 
   (save-excursion
-    (if (and (bounds-of-thing-at-point 'word) (end-of-thing 'word))
+    (if (and (bounds-of-thing-at-point current-word-highlight-thing)
+             (end-of-thing current-word-highlight-thing))
         (forward-char 1))
     (forward-word 1)
     (forward-char -1)
@@ -122,10 +136,10 @@
   "Highlight the word under the point.  If the point is not on a word, highlight the around word."
   (interactive)
   (current-word-highlight-unhighlight)
-  (if current-word-highlight-mode
-      (progn
-        (current-word-highlight-light-up 'current-word-highlight-face)
-        (current-word-highlight-around)))
+  (when current-word-highlight-mode
+    (current-word-highlight-light-up 'current-word-highlight-face)
+    (when current-word-highlight-context
+      (current-word-highlight-around)))
   (add-hook 'pre-command-hook #'current-word-highlight-unhighlight))
 
 ;;;###autoload
@@ -137,9 +151,8 @@
                (setq current-word-highlight-global-timer
                      (run-with-idle-timer current-word-highlight-time
                                           :repeat 'current-word-highlight-word-at-point))))
-    (progn
-      (current-word-highlight-cancel-timer)
-      (current-word-highlight-unhighlight))))
+    (current-word-highlight-cancel-timer)
+    (current-word-highlight-unhighlight)))
 
 ;;;###autoload
 (define-globalized-minor-mode global-current-word-highlight-mode
@@ -147,4 +160,5 @@
   :group 'current-word-highlight)
 
 (provide 'current-word-highlight)
+
 ;;; current-word-highlight.el ends here
